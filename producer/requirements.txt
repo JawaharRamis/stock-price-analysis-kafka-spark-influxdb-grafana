@@ -1,0 +1,7 @@
+confluent_kafka
+python-dotenv
+findspark
+psycopg2-binary
+yfinance
+influxdb_client
+schedule

@@ -1,7 +1,5 @@
 version: '2'
-# networks:
-#   mynetwork:
-#     external: true
+
 services:
   zookeeper:
     image: wurstmeister/zookeeper
@@ -9,6 +7,8 @@ services:
     ports:
      - "2181:2181"
     restart: unless-stopped
+    networks:
+      - bridge
 
   kafka:
     image: wurstmeister/kafka
@@ -22,7 +22,7 @@ services:
       KAFKA_ADVERTISED_PORT: "9092"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "reddit-submissions:1:1, reddit-subreddit:1:1"
+      KAFKA_CREATE_TOPICS: "stock-general-information:4:1, real-time-stock-prices:4:1"
       KAFKA_LOG_RETENTION_HOURS: 1
       KAFKA_LOG_RETENTION_BYTES: 4073741824
       KAFKA_LOG_SEGMENT_BYTES: 1073741824
@@ -34,6 +34,8 @@ services:
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+    networks:
+      - bridge
 
   spark-master:
     image: docker.io/bitnami/spark:3.3
@@ -53,6 +55,8 @@ services:
     volumes:
       - ./:/app/ # Mount your Spark Streaming app
     restart: unless-stopped
+    networks:
+      - bridge
 
   spark-submit:
     image: docker.io/bitnami/spark:3.3
@@ -60,11 +64,13 @@ services:
     volumes:
       - ./:/app/
       - ./packages/postgresql-42.5.4.jar:/opt/bitnami/spark/jars/postgresql-42.5.4.jar
-    command: ["sh", "-c", "pip install -r /app/requirements.txt && spark-submit --jars /opt/bitnami/spark/jars/postgresql-42.5.4.jar --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3 --master spark://spark-master:7077 /app/consumer/spark_consumer.py"]
+    command: ["sh", "-c", "pip install -r /app/requirements.txt && spark-submit --jars /opt/bitnami/spark/jars/postgresql-42.5.4.jar --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3 --master spark://spark-master:7077 /app/consumer/consumer.py"]
     # ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3","--master", "spark://spark-master:7077", "/app/spark_consumer.py"]
     depends_on:
       - spark-master
     restart: unless-stopped
+    networks:
+      - bridge
   
   spark-worker:
     image: docker.io/bitnami/spark:3.3
@@ -80,18 +86,76 @@ services:
       - SPARK_USER=spark
     ports:
       - "8081:8081"
+    networks:
+      - bridge
 
   postgresql:
     image: postgres:latest
     container_name: ktech_postgresql
     environment:
-      POSTGRES_DB: reddit-postgres
+      POSTGRES_DB: stock-info
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
     volumes:
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./script/initdb.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - bridge
+
+  influxdb:
+    image: bitnami/influxdb:2.5.1
+    container_name: influxdb
+    restart: always
+    ports:
+      - 8086:8086
+    volumes:
+      - .\influxdb:/bitnami/influxdb
+    environment:
+      - INFLUXDB_ADMIN_USER_PASSWORD=password123
+      - INFLUXDB_USER=my_user
+      - INFLUXDB_USER_PASSWORD=my_password
+      - INFLUXDB_ADMIN_USER_TOKEN=N2ty_VDqo0OIMdEHqTl16P37v9LDvmYiDPgOleKrghfaxHt6VS_03nNystn4GWCo7coeXLhvpxJ1Xf2OvlGXcQ==
+    networks:
+      - bridge
+  
+  grafana:
+    image: grafana/grafana-oss:8.4.3
+    volumes:
+      - grafana-storage:/var/lib/grafana:rw
+    depends_on:
+      - influxdb
+    ports:
+      - 3000:3000
+    networks:
+      - bridge
+
+  stock-python:
+    image: stock-python
+    container_name: stock-python
+    build: ./producer
+    ports:
+     - "5000:5000"
+    depends_on:
+      - postgresql
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=postgresql
+      - POSTGRES_PORT=5432
+      - POSTGRES_DBNAME=stock_info
+      - STOCKS=AMZN,AAPL,MSFT,GOOGL
+    volumes:
+      - ./logs:/app/logs
+    networks:
+     - bridge
+
+volumes:
+  grafana-storage:
+
+networks:
+  bridge:
+
 
 
 
