@@ -4,7 +4,7 @@
 
 ## Overview
 
-This project is designed to retrieve real-time stock data, perform streaming data analysis using Apache Kafka and Apache Spark, store data in InfluxDB, and visualize the data with Grafana. It aims to provide insights into the stock market and allow users to monitor stock prices effectively.
+This project is designed to retrieve real-time stock data, perform streaming data analysis using Apache Kafka and Apache Spark, store data in InfluxDB, and visualize the data with Grafana. It aims to provide insights into the stock market and allow users to monitor stock prices effectively.  General information regarding the stock is also retrieved and stored onto a Postrgesql database.
 
 ## Table of Contents
 
