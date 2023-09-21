@@ -1,119 +1,107 @@
-# Reddit Data Pipeline Project
+---
 
-This project is designed to collect data from Reddit using the Reddit API, process it using Apache Kafka and Apache Spark, and store the results in a PostgreSQL database. It involves a data pipeline that consists of a Kafka producer, Spark streaming consumer, and PostgreSQL sink.
+# Real-Time Stock Data Streaming and Analysis
+
+## Overview
+
+This project is designed to retrieve real-time stock data, perform streaming data analysis using Apache Kafka and Apache Spark, store data in InfluxDB, and visualize the data with Grafana. It aims to provide insights into the stock market and allow users to monitor stock prices effectively.
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Project Components and Interaction](#project-components-and-interaction)
-- [Workflow Overview](#workflow-overview)
+- [Project Structure](#project-structure)
 - [Usage](#usage)
-
+- [Data Flow](#data-flow)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Prerequisites
 
-Before running the project, ensure you have the following installed:
+Before you begin, ensure you have met the following requirements:
 
-- Python (3.x)
-- Docker
-- Apache Kafka
-- Apache Spark
-- PostgreSQL
-
-## Project Structure
-
-The project is structured as follows:
-
-```
-reddit-data-pipeline/
-├── producer/
-│   ├── producer.py             # Reddit data collection using PRAW
-├── consumer/
-│   ├── spark_consumer.py       # Spark streaming application
-├── logs/
-│   ├── logger.py               # Logging configuration
-├── docker-compose.yml          # Docker Compose configuration
-└── README.md
-```
+- Docker and Docker Compose installed
+- Python 3.8 or higher
+- Kafka, Spark, InfluxDB, and Grafana images available in your Docker environment
+- Stock symbols and necessary API keys if applicable
 
 ## Getting Started
 
-1. Clone the repository:
+To get started with this project, follow these steps:
+
+1. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/reddit-data-pipeline.git
+   git clone https://github.com/your-username/real-time-stock-analysis.git
    ```
 
-2. Navigate to the project directory:
+2. Change to the project directory:
 
    ```bash
-   cd reddit-data-pipeline
+   cd real-time-stock-analysis
    ```
 
-3. Create a `.env` file with necessary environment variables.
-
-## Configuration
-
-- Configure your Reddit API credentials in `.env`.
-- Update Kafka and Spark configurations in `docker-compose.yml`.
-- Update PostgreSQL connection properties in `spark_consumer.py`.
-- Update subreddit to explore in `.env`.
-
-## Project Components and Interaction
-
-1. **Producer:**
-   - Responsible for collecting data (post details) from Reddit using the PRAW library.
-   - Formats the data into JSON messages and produces them to the Kafka topics ("reddit-submissions").
-   - Interacts with the Kafka broker to publish messages for downstream processing.
-   - By design choice, publisher is executed outside the docker container.
-
-2. **Kafka:**
-   - Acts as a message broker that handles the communication between the Producer and Consumer.
-   - Receives messages from the Producer and stores them in topics ("reddit-submissions").
-   - Distributes messages to interested Consumers for processing.
-
-3. **Spark Consumer:**
-   - Reads data from Kafka topics using structured streaming.
-   - Parses JSON messages into structured data using defined schemas.
-   - Performs data transformations and analysis on the streaming data using PySpark.
-   - Writes the processed results to PostgreSQL.
-   - Utilizes the PostgreSQL JDBC driver to establish a connection to the PostgreSQL database and write data.
-
-4. **PostgreSQL:**
-   - Serves as the data storage for the analyzed Reddit data.
-   - Receives processed data from the Spark Consumer and inserts it into the "reddit_submission_data" table.
-   - Stores data in a structured format for querying and analysis.
-
-### Workflow Overview
-
-1. The Producer component uses PRAW to collect data from Reddit and sends it as JSON messages to Kafka topics.
-2. Kafka, acting as a broker, stores the messages and forwards them to the Spark Consumer.
-3. The Spark Consumer reads messages from Kafka, parses JSON, and processes the data using PySpark.
-4. Processed results are written to the PostgreSQL database using a JDBC connection.
-5. PostgreSQL stores the analyzed data in a structured manner for querying and further analysis.
-
-Overall, this architecture allows data to flow seamlessly from Reddit to Kafka, processed by Spark, and finally stored in PostgreSQL for future reference and analysis. Each component plays a crucial role in the data pipeline, facilitating efficient data processing and storage.
-
-## Usage
-
-1. Start the Kafka, Spark, and PostgreSQL containers:
+3. Run the Docker Compose file to set up the project environment:
 
    ```bash
    docker-compose up -d
    ```
 
-2. Run the Kafka producer to collect Reddit data:
+4. Access the different services:
 
-   ```bash
-   python producer/producer.py
-   ```
+   - Apache Kafka: http://localhost:9092
+   - Apache Spark: http://localhost:8080
+   - InfluxDB: http://localhost:8086
+   - Grafana: http://localhost:3000
 
+## Project Structure
+
+The project structure is organized as follows:
+
+```
+├── producer/              # Python scripts to produce stock data
+├── consumer/              # Spark Streaming consumer
+├── logs/                  # Log files generated by the application
+├── docker-compose.yml     # Docker Compose configuration file
+├── .env                   # Environment variables for the project
+├── README.md              # Project documentation (this file)
+```
+
+## Usage
+
+- **Producer**: The producer scripts (located in the `producer` directory) are responsible for retrieving real-time stock data using APIs and sending this data to Kafka topics.
+
+- **Consumer**: The Spark Streaming consumer (located in the `consumer` directory) processes the real-time data, performs analysis, and stores it in InfluxDB.
+
+- **Data Visualization**: Grafana can be used to visualize the stock data stored in InfluxDB. You can create dashboards and panels to display stock prices, trends, and more.
+
+## Data Flow
+
+1. Real-time stock data is retrieved using the producer scripts and sent to Kafka topics.
+
+2. The Spark Streaming consumer reads data from Kafka topics, performs data analysis, and stores the results in InfluxDB.
+
+3. Grafana is used to visualize and monitor the stock data stored in InfluxDB.
+
+## Configuration
+
+- Configuration for various services, such as Kafka, Spark, InfluxDB, and Grafana, can be found in the `docker-compose.yml` file.
+
+- Environment variables can be configured in the `.env` file.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request.
+Contributions to this project are welcome! To contribute:
 
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and submit a pull request.
 
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Feel free to add more details, explanations, or specific instructions based on your project's requirements.
