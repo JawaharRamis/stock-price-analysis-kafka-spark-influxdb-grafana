@@ -14,6 +14,7 @@ This project is designed to retrieve real-time stock data, perform streaming dat
 - [Project Components](#project-components)
 - [Usage](#usage)
 - [Data Flow](#data-flow)
+- [Dashboard Preview](#dashboard-preview)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 
@@ -127,6 +128,15 @@ The real-time stock data streaming project comprises several key components, eac
    - **Timestamp**: Each InfluxDB Point has a timestamp, indicating when the data was recorded.
 
 3. Grafana is used to visualize and monitor the stock data stored in InfluxDB.
+
+## Dashboard Preview
+
+The real-time stock monitoring dashboard provides a comprehensive view of stock prices and key metrics. Below is a preview of the dashboard:
+
+![Dashboard Screenshot](images/dashboard.jpg)
+
+This dashboard allows you to track stock prices, analyze trends, and make informed decisions. Explore historical data, monitor real-time updates, and gain valuable insights into the stock market.
+
 
 ## Configuration
 
