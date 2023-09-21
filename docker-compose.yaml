@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   zookeeper:
@@ -61,11 +61,15 @@ services:
   spark-submit:
     image: docker.io/bitnami/spark:3.3
     container_name: ktech_spark_submit
+    environment:
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
+      INFLUXDB_MEASUREMENT: ${INFLUXDB_MEASUREMENT}
+      INFLUX_ORG: ${INFLUX_ORG}
+      INFLUX_TOKEN: ${INFLUX_TOKEN}
     volumes:
       - ./:/app/
       - ./packages/postgresql-42.5.4.jar:/opt/bitnami/spark/jars/postgresql-42.5.4.jar
     command: ["sh", "-c", "pip install -r /app/requirements.txt && spark-submit --jars /opt/bitnami/spark/jars/postgresql-42.5.4.jar --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3 --master spark://spark-master:7077 /app/consumer/consumer.py"]
-    # ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3","--master", "spark://spark-master:7077", "/app/spark_consumer.py"]
     depends_on:
       - spark-master
     restart: unless-stopped
@@ -74,16 +78,26 @@ services:
   
   spark-worker:
     image: docker.io/bitnami/spark:3.3
+    # environment:
+    #   - SPARK_MODE=worker
+    #   - SPARK_MASTER_URL=spark://spark-master:7077
+    #   - SPARK_WORKER_MEMORY=1G
+    #   - SPARK_WORKER_CORES=1
+    #   - SPARK_RPC_AUTHENTICATION_ENABLED=no
+    #   - SPARK_RPC_ENCRYPTION_ENABLED=no
+    #   - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+    #   - SPARK_SSL_ENABLED=no
+    #   - SPARK_USER=spark
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
-      - SPARK_USER=spark
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 1G
+      SPARK_WORKER_CORES: 1
+      SPARK_RPC_AUTHENTICATION_ENABLED: no
+      SPARK_RPC_ENCRYPTION_ENABLED: no
+      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
+      SPARK_SSL_ENABLED: no
+      SPARK_USER: spark
     ports:
       - "8081:8081"
     networks:
@@ -112,10 +126,10 @@ services:
     volumes:
       - .\influxdb:/bitnami/influxdb
     environment:
-      - INFLUXDB_ADMIN_USER_PASSWORD=password123
-      - INFLUXDB_USER=my_user
-      - INFLUXDB_USER_PASSWORD=my_password
-      - INFLUXDB_ADMIN_USER_TOKEN=N2ty_VDqo0OIMdEHqTl16P37v9LDvmYiDPgOleKrghfaxHt6VS_03nNystn4GWCo7coeXLhvpxJ1Xf2OvlGXcQ==
+      INFLUXDB_ADMIN_USER_PASSWORD: ${INFLUXDB_ADMIN_USER_PASSWORD}
+      INFLUXDB_USER: ${INFLUXDB_USER}
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      INFLUXDB_ADMIN_USER_TOKEN: ${INFLUX_TOKEN}
     networks:
       - bridge
   
@@ -138,13 +152,20 @@ services:
      - "5000:5000"
     depends_on:
       - postgresql
+    # environment:
+    #   - POSTGRES_USER=admin
+    #   - POSTGRES_PASSWORD=admin
+    #   - POSTGRES_HOST=postgresql
+    #   - POSTGRES_PORT=5432
+    #   - POSTGRES_DBNAME=stock-info
+    #   - STOCKS=AMZN,AAPL,MSFT,GOOGL
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_HOST=postgresql
-      - POSTGRES_PORT=5432
-      - POSTGRES_DBNAME=stock_info
-      - STOCKS=AMZN,AAPL,MSFT,GOOGL
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
+      STOCKS: ${STOCKS}
     volumes:
       - ./logs:/app/logs
     networks:

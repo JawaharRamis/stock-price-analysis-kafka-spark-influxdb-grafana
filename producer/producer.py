@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from logs.logger import setup_logger
 
 from producer_utils import retrieve_real_time_data, get_stock_details
-from utils import load_environment_variables
+from script.utils import load_environment_variables
 load_dotenv()
 
 

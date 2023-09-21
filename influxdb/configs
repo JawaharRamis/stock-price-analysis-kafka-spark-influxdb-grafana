@@ -1,6 +1,6 @@
 [default]
-  url = "http://influx:8086"
-  token = "UVbnMsegPcmLIzajdqnBvrNP1rFZKi7K-7Q5g64it9Ot6idDhs_iCFfnpwszJBEJBn3_F6kK6MwBl3JPx7Gzhw=="
+  url = "http://localhost:8086"
+  token = "7b9D2O4lNgRLgK6_KI8D8RetbJcl3f46nibMFkujx9bprvYKK-QDPqsRDgfErSTVb6PWD0VCaGd_wAkj0UzwtA=="
   org = "primary"
   active = true
 # 

@@ -4,8 +4,12 @@ from producer_utils import get_stock_details
 from logs.logger import setup_logger
 import os
 import time
+import schedule
+from datetime import datetime
 
 def main(logger):
+    logger.info(f"Script executed at: {datetime.now()}")
+
     postgresql_properties  = {
         "user": os.environ.get("POSTGRES_USER"),
         "password": os.environ.get("POSTGRES_PASSWORD"),
@@ -15,16 +19,17 @@ def main(logger):
     }
 
     try:
-        # connection = psycopg2.connect(**postgresql_properties)
         time.sleep(10)
         # Add a delay before attempting to connect
-        connection = psycopg2.connect(
-            host='postgresql',
-            port=5432,
-            dbname='stock-info',
-            user='admin',
-            password='admin'
-        )
+        connection = psycopg2.connect(**postgresql_properties)
+        
+        # connection = psycopg2.connect(
+        #     host='postgresql',
+        #     port=5432,
+        #     dbname='stock-info',
+        #     user='admin',
+        #     password='admin'
+        # )
         cursor = connection.cursor()
         # Fetch stock details
         stock_infos = get_stock_details(os.environ.get("STOCKS"), logger)
@@ -64,13 +69,16 @@ def main(logger):
         connection.commit()
         connection.close()
         # Log success
-        logging.info(f"Stock information retrieved and inserted into the database")
+        logger.info(f"Stock information retrieved and inserted into the database")
 
     except Exception as e:
-        print(e)
-        logging.error(f"Error inserting stock details into PostgreSQL: {e}")
+        logger.error(f"Error inserting stock details into PostgreSQL: {e}")
 
 if __name__ == "__main__":
     logger = setup_logger(__name__, 'producer.log')
     main(logger)
+    schedule.every().day.at("16:00").do(main,logger)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 

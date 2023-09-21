@@ -4644,27 +4644,3 @@
 2023-09-21 07:16:39 - INFO - Script executed at: 2023-09-21 07:16:39.826628
 2023-09-21 07:16:49 - INFO - ['AMZN', 'AAPL', 'MSFT', 'GOOGL']
 2023-09-21 07:31:39 - INFO - Script executed at: 2023-09-21 07:31:39.741553
-2023-09-21 07:45:17 - INFO - Script executed at: 2023-09-21 07:45:17.191408
-2023-09-21 07:45:27 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.21.0.4), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 07:49:06 - INFO - Script executed at: 2023-09-21 07:49:06.928109
-2023-09-21 07:49:16 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.22.0.2), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 07:50:53 - INFO - Script executed at: 2023-09-21 07:50:53.512478
-2023-09-21 07:51:03 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.23.0.2), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 07:53:40 - INFO - Script executed at: 2023-09-21 07:53:40.977209
-2023-09-21 07:53:50 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.24.0.2), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 07:55:23 - INFO - Script executed at: 2023-09-21 07:55:23.104760
-2023-09-21 07:55:33 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.25.0.3), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 13:58:22 - INFO - Script executed at: 2023-09-21 13:58:22.067045
-2023-09-21 13:58:32 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.27.0.5), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 14:04:31 - INFO - Script executed at: 2023-09-21 14:04:31.826346
-2023-09-21 14:04:41 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.28.0.6), port 5432 failed: FATAL:  database "stock_info" does not exist
-
-2023-09-21 14:07:55 - INFO - Script executed at: 2023-09-21 14:07:55.020037
-2023-09-21 14:08:05 - ERROR - Error inserting stock details into PostgreSQL: connection to server at "postgresql" (172.29.0.6), port 5432 failed: FATAL:  database "stock_info" does not exist
-
