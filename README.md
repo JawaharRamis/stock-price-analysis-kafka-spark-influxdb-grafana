@@ -70,9 +70,9 @@ The project structure is organized as follows:
 
 ## Usage
 
-- **Producer**: The producer scripts (located in the `producer` directory) are responsible for retrieving real-time stock data using APIs and sending this data to Kafka topics.
+- **Producer**: The producer scripts (located in the `producer` directory) are responsible for retrieving real-time stock data using `yfinance` library and sending this data to Kafka topics. T
 
-- **Consumer**: The Spark Streaming consumer (located in the `consumer` directory) processes the real-time data, performs analysis, and stores it in InfluxDB.
+- **Consumer**: The Spark Streaming consumer (located in the `consumer` directory) processes the real-time data and stores it in the timeseries database, InfluxDB.
 
 - **Data Visualization**: Grafana can be used to visualize the stock data stored in InfluxDB. You can create dashboards and panels to display stock prices, trends, and more.
 
@@ -80,7 +80,14 @@ The project structure is organized as follows:
 
 1. Real-time stock data is retrieved using the producer scripts and sent to Kafka topics.
 
-2. The Spark Streaming consumer reads data from Kafka topics, performs data analysis, and stores the results in InfluxDB.
+2. The Spark Streaming consumer reads data from Kafka topics and stores the results in InfluxDB. Before sending real-time stock data to InfluxDB, it is essential to transform the data into a compatible format known as InfluxDB Point. InfluxDB Points are the fundamental unit of data in InfluxDB and consist of the following components:
+   Measurement: The measurement name represents the specific dataset or data stream being collected. In our case, the measurement name is typically set to "stock-price-v1".
+
+   Tags: Tags are key-value pairs that provide metadata or labels for the data. For example, a stock symbol like "AMZN" can be a tag, allowing you to filter and group data based on the stock symbol.
+   
+   Fields: Fields represent the actual data values associated with the measurement. These are typically numeric values such as stock prices, volumes, or other metrics.
+   
+   Timestamp: Each InfluxDB Point has a timestamp, indicating when the data was recorded.
 
 3. Grafana is used to visualize and monitor the stock data stored in InfluxDB.
 
