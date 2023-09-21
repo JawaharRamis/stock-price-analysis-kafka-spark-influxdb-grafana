@@ -12,7 +12,6 @@ This project is designed to retrieve real-time stock data, perform streaming dat
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [Project Components](#project-components)
-- [Usage](#usage)
 - [Data Flow](#data-flow)
 - [Dashboard Preview](#dashboard-preview)
 - [Configuration](#configuration)
@@ -152,6 +151,5 @@ Contributions to this project are welcome! To contribute:
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and submit a pull request.
 
-![Dashboard Screenshot](images/dashboard.jpg)
 
 
