@@ -142,6 +142,6 @@ Contributions to this project are welcome! To contribute:
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and submit a pull request.
 
-![Dashboard Screenshot](images/dashboard.png)
+![Dashboard Screenshot](images/dashboard.jpg)
 
 
