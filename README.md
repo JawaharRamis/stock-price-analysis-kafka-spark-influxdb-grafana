@@ -33,7 +33,7 @@ To get started with this project, follow these steps:
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/real-time-stock-analysis.git
+   git clone [https://github.com/JawaharRamis/stock-price-analysis-kafka-spark-influxdb-grafana.git]
    ```
 
 2. Change to the project directory:
