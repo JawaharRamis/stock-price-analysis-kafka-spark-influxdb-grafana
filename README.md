@@ -134,12 +134,14 @@ The real-time stock data streaming project comprises several key components, eac
 
 - Environment variables can be configured in the `.env` file.
 
-![Dashboard Screenshot](images/dashboard.png)
-
+## Contributing
 
 Contributions to this project are welcome! To contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and submit a pull request.
+
+![Dashboard Screenshot](images/dashboard.png)
+
 
